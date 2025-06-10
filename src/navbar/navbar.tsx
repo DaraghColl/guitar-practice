@@ -1,36 +1,42 @@
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 import { AudioLines, HeartPulse, Guitar } from 'lucide-react';
+import { motion } from 'motion/react';
+
+const links = [
+  {
+    to: '/',
+    Icon: AudioLines,
+  },
+  {
+    to: '/metronome',
+    Icon: HeartPulse,
+  },
+  {
+    to: '/songs',
+    Icon: Guitar,
+  },
+];
 
 const Navbar = () => {
+  const location = useLocation();
+  const { pathname } = location;
   return (
     <div className="flex w-fit items-center justify-center gap-6 self-center rounded-sm p-4">
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          isActive ? '[&>svg]:stroke-blue-600' : ''
-        }
-        end
-      >
-        <AudioLines size={40} />
-      </NavLink>
-      <NavLink
-        to="/metronome"
-        className={({ isActive }) =>
-          isActive ? '[&>svg]:stroke-blue-600' : ''
-        }
-        end
-      >
-        <HeartPulse size={40} />
-      </NavLink>
-      <NavLink
-        to="/songs"
-        className={({ isActive }) =>
-          isActive ? '[&>svg]:stroke-blue-600' : ''
-        }
-        end
-      >
-        <Guitar size={40} />
-      </NavLink>
+      {links.map(({ to, Icon }) => (
+        <div key={to} className="relative">
+          <NavLink to={to} end>
+            <Icon className="stroke-gray-600" size={40} />
+          </NavLink>
+          {pathname === to && (
+            <motion.div
+              layoutId="active-nav"
+              className="border-secondary absolute -bottom-4 flex w-full justify-center"
+            >
+              <div className="h-2 w-2 rounded-full bg-black" />
+            </motion.div>
+          )}
+        </div>
+      ))}
     </div>
   );
 };
