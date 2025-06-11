@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, type FC, type RefObject } from 'react';
 import { motion } from 'motion/react';
-import { MinusCircle, PlusCircle } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { PlayPause } from '../../components/play-pause/play-pause';
 
 const createCLick = (
@@ -30,6 +30,9 @@ const Metronome: FC = () => {
   const gainNodeRef = useRef<GainNode | null>(null);
   const nextBeatTimeRef = useRef<number>(0);
   const [beatNumber, setBeatNumber] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [beatsPerMeasure, _] = useState(4);
+  console.log('🚀 ~ beatNumber:', beatNumber);
 
   // Initialize AudioContext on first play
   useEffect(() => {
@@ -62,8 +65,7 @@ const Metronome: FC = () => {
 
       while (nextBeatTimeRef.current < audioContext.currentTime + lookahead) {
         createCLick(audioContext, nextBeatTimeRef);
-        setBeatNumber((beatNumber) => beatNumber + 1);
-        console.log('create click');
+        setBeatNumber((number) => (number < 4 ? number + 1 : (number = 1)));
 
         // Calculate next beat time
         const secondsPerBeat = 60 / bpm;
@@ -83,31 +85,33 @@ const Metronome: FC = () => {
   }, [isPlaying, bpm]);
 
   const handleTogglePlay = () => {
+    if (isPlaying === true) setBeatNumber(0);
     setIsPlaying((prev) => !prev);
   };
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <div className="mb-10 flex h-1/2 flex-col justify-center">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <button
             className="cursor-pointer"
             onClick={() => setBpm((bpm) => bpm - 1)}
           >
-            <MinusCircle size={30} className="stroke-gray-600" />
+            <Minus size={40} className="stroke-gray-600" />
           </button>
           <motion.div
             initial={true}
-            animate={{ opacity: isPlaying && beatNumber % 2 === 0 ? 0.2 : 1 }}
-            className="flex h-60 w-60 flex-col items-center justify-center rounded-full bg-gray-200"
+            className="relative flex h-60 w-60 flex-col items-center justify-center rounded-full bg-gray-200"
           >
             <input
               aria-label="bpm input"
               className="w-40 [appearance:textfield] text-center text-7xl text-gray-600 outline-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-              maxLength={3}
-              type="number"
+              max={3}
+              type="text"
               value={bpm}
-              onChange={(e) => setBpm(Number(e.target.value))}
+              onChange={(e) =>
+                Number(e.target.value) <= 300 && setBpm(Number(e.target.value))
+              }
             />
             <span className="text-gray-600">bpm</span>
           </motion.div>
@@ -115,8 +119,17 @@ const Metronome: FC = () => {
             className="cursor-pointer"
             onClick={() => setBpm((bpm) => bpm + 1)}
           >
-            <PlusCircle size={30} className="stroke-gray-600" />
+            <Plus size={40} className="stroke-gray-600" />
           </button>
+        </div>
+
+        <div className="mt-10 flex items-center justify-center gap-4">
+          {Array.from({ length: beatsPerMeasure }, (_, index) => (
+            <div
+              key={index}
+              className={`h-5 w-5 rounded-full bg-gray-300 ${beatNumber === index + 1 && 'bg-gray-600'}`}
+            />
+          ))}
         </div>
       </div>
       <PlayPause isPlaying={isPlaying} onPlayPauseClick={handleTogglePlay} />
