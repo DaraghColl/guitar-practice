@@ -97,15 +97,15 @@ const Metronome: FC = () => {
             className="cursor-pointer"
             onClick={() => setBpm((bpm) => bpm - 1)}
           >
-            <Minus size={40} className="stroke-gray-600" />
+            <Minus size={40} className="stroke-gray-500 dark:stroke-gray-50" />
           </button>
           <motion.div
             initial={true}
-            className="relative flex h-60 w-60 flex-col items-center justify-center rounded-full bg-gray-200"
+            className="relative flex h-60 w-60 flex-col items-center justify-center rounded-full bg-gray-200 dark:bg-gray-50"
           >
             <input
               aria-label="bpm input"
-              className="w-40 [appearance:textfield] text-center text-7xl text-gray-600 outline-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              className="w-40 [appearance:textfield] text-center text-7xl text-gray-500 outline-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               max={3}
               type="text"
               value={bpm}
@@ -113,13 +113,13 @@ const Metronome: FC = () => {
                 Number(e.target.value) <= 300 && setBpm(Number(e.target.value))
               }
             />
-            <span className="text-gray-600">bpm</span>
+            <span className="text-gray-500">bpm</span>
           </motion.div>
           <button
             className="cursor-pointer"
             onClick={() => setBpm((bpm) => bpm + 1)}
           >
-            <Plus size={40} className="stroke-gray-600" />
+            <Plus size={40} className="stroke-gray-500 dark:stroke-gray-50" />
           </button>
         </div>
 
@@ -127,7 +127,7 @@ const Metronome: FC = () => {
           {Array.from({ length: beatsPerMeasure }, (_, index) => (
             <div
               key={index}
-              className={`h-5 w-5 rounded-full bg-gray-300 ${beatNumber === index + 1 && 'bg-gray-600'}`}
+              className={`h-5 w-5 rounded-full bg-gray-200 ${beatNumber === index + 1 && 'bg-gray-500'}`}
             />
           ))}
         </div>

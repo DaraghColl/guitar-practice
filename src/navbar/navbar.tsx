@@ -25,14 +25,14 @@ const Navbar = () => {
       {links.map(({ to, Icon }) => (
         <div key={to} className="relative">
           <NavLink to={to} end>
-            <Icon className="stroke-gray-600" size={40} />
+            <Icon className="stroke-gray-500 dark:stroke-gray-50" size={40} />
           </NavLink>
           {pathname === to && (
             <motion.div
               layoutId="active-nav"
               className="border-secondary absolute -bottom-4 flex w-full justify-center"
             >
-              <div className="h-2 w-2 rounded-full bg-black" />
+              <div className="h-2 w-2 rounded-full bg-gray-500 dark:bg-gray-50" />
             </motion.div>
           )}
         </div>

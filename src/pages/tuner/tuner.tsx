@@ -24,7 +24,7 @@ const Tuner = () => {
                 isInTune =
                   Math.abs(currentNote.cents) < 2.5 && isCenter && highlight;
               }
-              let background = 'bg-gray-200';
+              let background = 'bg-gray-500 dark:bg-gray-50';
               if (highlight) {
                 if (isInTune) {
                   background = 'bg-green-400';
