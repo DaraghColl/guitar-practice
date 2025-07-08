@@ -10,8 +10,8 @@ const createCLick = (
   const osc = audioContext.createOscillator();
   const gain = audioContext.createGain();
 
-  osc.type = 'sine'; // A simple sine wave for the click
-  osc.frequency.setValueAtTime(880, audioContext.currentTime); // High pitch for the click
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(880, audioContext.currentTime);
   gain.gain.setValueAtTime(1, nextBeatTimeRef.current);
   gain.gain.exponentialRampToValueAtTime(0.001, nextBeatTimeRef.current + 0.05);
 
@@ -32,7 +32,6 @@ const Metronome: FC = () => {
   const [beatNumber, setBeatNumber] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [beatsPerMeasure, _] = useState(4);
-  console.log('🚀 ~ beatNumber:', beatNumber);
 
   // Initialize AudioContext on first play
   useEffect(() => {
@@ -67,7 +66,6 @@ const Metronome: FC = () => {
         createCLick(audioContext, nextBeatTimeRef);
         setBeatNumber((number) => (number < 4 ? number + 1 : (number = 1)));
 
-        // Calculate next beat time
         const secondsPerBeat = 60 / bpm;
         nextBeatTimeRef.current += secondsPerBeat;
       }
@@ -95,7 +93,10 @@ const Metronome: FC = () => {
         <div className="flex items-center gap-4">
           <button
             className="cursor-pointer"
-            onClick={() => setBpm((bpm) => bpm - 1)}
+            onClick={() => {
+              setBpm((bpm) => bpm - 1);
+              setBeatNumber(0);
+            }}
           >
             <Minus size={40} className="stroke-gray-500 dark:stroke-gray-50" />
           </button>
@@ -117,7 +118,10 @@ const Metronome: FC = () => {
           </motion.div>
           <button
             className="cursor-pointer"
-            onClick={() => setBpm((bpm) => bpm + 1)}
+            onClick={() => {
+              setBpm((bpm) => bpm + 1);
+              setBeatNumber(0);
+            }}
           >
             <Plus size={40} className="stroke-gray-500 dark:stroke-gray-50" />
           </button>
